@@ -1,0 +1,36 @@
+
+/*
+   Disk I/O is in units of blocks. You can read a complete block or
+   write a complete block. Each block is a sequence of bytes of size
+   64 bytes. File system or disk manager objects store some specific
+   data structures in these blocks. So, you need a mechanism for converting
+   these data structures to sequence of bytes of size 64 bytes, and vice
+   versa. Some examples of how to do this are given below.
+*/
+
+
+/* Writing a bit vector to a partition block 0 */
+/* Executed by a PartitionManager object */
+
+BitVector *dmBV = new BitVector(myPartitionSize);
+//modify the bitvector as needed, using setBit and resetBit functions.
+
+//create the buffer needed to store the bitvector on the filesystem
+char buffer[64];
+for (int j = 0; j < 64; j++) buffer[j] = '#';
+
+//copy the bitvector into the buffer and write it out.
+dmBV->getBitVector((unsigned int *)buffer);
+myDM->writeDiskBlock(myPartitionName, 0, buffer);
+
+
+/* Reading a bit vector from a partition block 0 */
+/* Executed by a PartitionManager object */
+
+BitVector *dmBV = new BitVector(myPartitionSize);
+char buffer[64];  //initialize the array with #'s, so you don't get garbage memory in the array.
+for (int j = 0; j < 64; j++) buffer[j] = '#';
+//read it in and now you can use it in the dmBV
+myDM->readDiskBlock(myPartitionName, 0, buffer);
+dmBV->setBitVector((unsigned int *)buffer);
+

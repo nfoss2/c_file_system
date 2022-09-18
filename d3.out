@@ -1,0 +1,147 @@
+begin driver 3
+rename test on fs1 (need driver1 first)
+rv from renameFile /$ to /x is -1 correct invalid name
+rv from renameFile /x to /a is -2 correct file doesn't exist
+rv from renameFile /A to /a is -3 correct /A already exists
+rv from renameFile /A to /x is 0 correct
+rv from renameFile /A to /x is -2 correct /A doesn't exist
+rv from openFile /A is -1 correct
+rv from openFile /a is 1 correct
+rv from renameFile /a to /y is -4 correct /a is open
+rv from closeFile /a is 0 correct
+rv from lockFile /b is 1 correct
+rv from renameFile /b to /g is -4 correct locked
+rv from unlockFile /b is 0 correct 
+rv from renameFile /b to /g is 0 correct
+rv from renameFile /b to /y is -2 correct
+rv from createFile /g is -1 correct 
+rv from createFile /b is 0 correct 
+rv from renameFile /b to /h is 0 correct
+
+delete testing 
+rv from deleteFile /$ is -3 correct
+rv from deleteFile b is -3 correct
+rv from deleteFile /bb is -3 correct
+rv from deleteFile /k is -1 correct k doesn't exist
+rv from deleteFile /c is 0 correct
+rv from deleteFile /e is 0 correct
+rv from deleteFile /e is -1 correct
+rv from openFile /e is -1 correct e was deleted
+rv from openFile /g is 2 correct
+rv from deleteFile /g is -2 correct /g is locked
+rv from closeFile /g is 0 correct
+rv from deleteFile /g is 0 correct
+rv from lockFile /C is 2 correct
+rv from deleteFile /C is -2 correct /C is locked
+rv from unlockFile /C is 0 correct 
+rv from deleteFile /C is 0 correct
+rv from createFile /c is 0 correct 
+
+ truncate tests
+rv from openFile /D w is 3 correct file openned (w) f1
+rv from openFile /b is 4 Correct file opened (m) f2 
+rv from writeFile /a f1 is 5 Correct wrote 5 s
+rv from writeFile /a f1 is 5 Correct wrote 5 b
+rv from writeFile /a f1 is 5 Correct wrote 5 K
+rv from writeFile /a f1 is 5 Correct wrote 5 M
+rv from appendFile /a f1 is 5 Correct wrote 5 s
+rv from writeFile /b f2 is 600 Correct wrote 600 M
+rv from writeFile /b f2 is 552 Correct wrote 552 M (full!)
+rv from closeFile /a fs1 is 0 correct
+rv from openFile /D r is 5 correct file opened (r) f1
+rv from truncFile /D f1 is -3 correct mode is r
+rv from truncFile ?? f1 is -1 correct no open file
+rv from truncFile /a f3 is -1 Correct failed to set rw to -10
+rv from closeFile /a f1 is 0 correct
+rv from openFile /D w is 6 correct file openned (m) f1
+rv from truncFile /D f1, seek 20 is 0 correct size and rw are same
+rv from seekFile /D is 0 correct 
+rv from readFile /D is 25 correct 
+Data read is 
+sssssbbbbbKKKKKMMMMMsssss
+rv from truncFile /D f1, seek 20 is 5 correct deleted last 5
+rv from seekFile /D is 0 correct 
+rv from readFile /D is 20 correct 
+Data read is 
+sssssbbbbbKKKKKMMMMM
+rv from truncFile /D f1, seek 15 is 5 correct deleted last 5
+rv from seekFile /D is 0 correct 
+rv from readFile /D is 15 correct 
+Data read is 
+sssssbbbbbKKKKK
+rv from truncFile /D f1, removed 15 correct emptied file
+rv from seekFile /D is 0 correct 
+rv from readFile /D is 0 correct 
+Data read is 
+
+rv from truncFile /d f2, removed 1 correct 1 byte removed
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 1151 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 63 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 1088 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 64 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 1024 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 768 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 256 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 64 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 192 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 128 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 64 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 32 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 32 correct 
+Data read is 
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+rv from truncFile /d f2, removed 24 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 8 correct 
+Data read is 
+MMMMMMMM
+rv from truncFile /d f2, removed 7 correct
+rv from seekFile /d is 0 correct 
+rv from readFile /d is 1 correct 
+Data read is 
+M
+
+ multi file open tests
+rv from openFile /d is 7 Correct file opened (m) f3 
+rv from writeFile /d f2 is 4 Correct wrote 4 s
+rv from seekFile /d is 0 correct 
+rv from writeFile /d f3 is 5 Correct wrote 5 b
+rv from appendFile /d f2 is 5 Correct wrote 5 s
+rv from seekFile /d f2 is 0 correct 
+rv from readFile /d f2 is 15 correct 
+Data read is 
+Mssssbbbbbsssss
+rv from truncFile /d f3, removed 5 correct
+rv from seekFile /d f2 is 0 correct 
+rv from readFile /d f2 is 10 correct 
+Data read is 
+Mssssbbbbb
+rv from appendFile /d f2 is 5 Correct wrote 5 M
+rv from truncFile /d f3, removed 5 correct
+rv from seekFile /d f2 is 0 correct 
+rv from readFile /d f2 is 10 correct 
+Data read is 
+Mssssbbbbb
+rv from closeFile /D f1 is 0 correct
+rv from closeFile /d f2 is 0 correct
+rv from closeFile /d f3 is 0 correct
+End of driver 3

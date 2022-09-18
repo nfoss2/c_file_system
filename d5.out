@@ -1,0 +1,97 @@
+
+ Driver 5:  Directories basic tests
+create  Directory on fs1
+rv from createDirectory  f is -3 correct
+rv from createDirectory /ff is -3 correct
+rv from createDirectory /$ is -3 correct
+rv from createDirectory /e is 0 correct
+rv from createDirectory /e is -1 correct /e dir exists
+rv from createDirectory /a is 0 correct
+rv from createFile /e is 0 correct
+rv from createFile /e/a is 0 correct
+rv from createDirectory /e/b is 0 correct
+rv from createFile /e/b/a is 0 correct
+rv from createFile /e/g/a is -4 correct no /e/g/ dir
+rv from createDirectory /e/g/a is -4 correct no /e/g/ dir
+rv from createDirectory /e/g/b is -4 correct no /e/g/ dir
+rv from createDirectory /h is 0 correct
+rv from createFile /e/b is 0 correct
+rv from createFile /e/a is -1 correct, already exists
+rv from createDirectory /e/a is 0 correct
+rv from createDirectory /e/a/a is 0 correct
+rv from createFile /e/a/a is 0 correct
+rv from createFile /e/a/a/b is 0 correct
+rv from createFile /e/a/$/b is -3 correct
+rv from createFile /e/a/a/m is 0 correct
+
+ open files in directories on fs1
+rv from openFile is /e/b 1 correct
+rv from openFile is /e/a 2 correct, open file /e/a
+rv from closeFile /e/a is 0 correct
+rv from openFile is /e/a/a/b 3 correct
+rv from openFile is /e/$/a/b -4 correct
+rv from lockFile /e/a/a/m is 1 correct
+rv from openFile is /e/a/a/m -3 correct bad lockid
+rv from openFile is /e/a/a/m 4 correct 
+
+ reads and writes on fs1
+rv from writeFile /e/b f1 is 5 Correct wrote 5 J
+rv from writeFile /e/b f1 is 5 Correct wrote 5 S
+rv from writeFile /e/b f1 is 5 Correct wrote 5 z
+rv from writeFile /e/b f1 is 5 Correct wrote 5 h
+rv from appendFile /e/b f1 is 5 Correct wrote 5 J
+rv from writeFile /e/a/a/m f3 is 37 Correct wrote 37 J
+rv from writeFile /e/a/a/m f3 is 91 Correct wrote 91 z
+rv from closeFile /e/b is 0 correct
+rv from closeFile /e/a/a/b is 0 correct
+rv from closeFile /e/a/a/m is 0 correct
+rv from unlockFile /e/a/a/m is 0 correct
+rv from openFile /e/b is 5 correct
+rv from openFile /e/a/a/b is 6 correct
+rv from openFile /e/a/a/m is 7 correct
+rv from readFile /e/b is 25 Correct 
+Data read is 
+JJJJJSSSSSzzzzzhhhhhJJJJJ
+rv from readFile /e/a/a/b is 0 Correct 
+Data read is 
+
+rv from readFile /e/a/a/m is 128 Correct 
+Data read is 
+JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+rv from closeFile /e/b is 0 correct
+rv from closeFile /e/a/a/b is 0 correct
+rv from closeFile /e/a/a/m is 0 correct
+
+create and deletes of directories and files
+rv from deleteFile /e/a/a/b is 0 correct
+rv from createDirectory /g is 0 correct
+rv from createDirectory /g/a is 0 correct
+rv from createDirectory /g/a/g is 0 correct
+rv from createFile /g/a/g/x is 0 correct
+rv from deleteDirectory /g is -2 correct
+rv from deleteDirectory /g/a is -2 correct
+rv from deleteDirectory /g/a/g is -2 correct
+rv from deleteDirectory /g/a/g/x is -1 correct x is file
+rv from deleteFile /g/a/g/x is 0 correct
+rv from deleteDirectory /g/a/g is 0 correct
+rv from deleteDirectory /g/a is 0 correct
+rv from deleteDirectory /g is 0 correct
+
+ file and directories tests on directories fs1
+rv from createDirectory /i is 0 correct
+rv from lockFile /h is 2 correct /h is locked, not /h directory
+rv from deleteFile /h is -2 correct /h file is locked
+rv from deleteFile /i is -1 correct /i is a dir
+
+ rename tests on directories fs1
+rv from renameFile /h /x is -3 correct /h is locked
+rv from renameFile /h /x is -3 correct /i dir exists
+rv from renameFile /h /x is -1 correct /$  invalid
+rv from renameFile /h /o is 0 correct
+rv from renameFile /h /o is -3 correct /o exists
+rv from unlockFile /h is 0 correct
+rv from renameFile /h /o is 0 correct file /h
+rv from renameFile /e/a/a/m /e/a/a/z is 0 correct
+rv from renameDirectory /e/a/a /e/a/z is 0 correct
+rv from renameDirectory /g/a/g /g/a/x is -2 correct doesn't exist.
+end of driver 5

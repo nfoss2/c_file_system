@@ -1,0 +1,7 @@
+
+You can make the following simplifying assumptions in your project:
+
+1. The block size is 64 bytes.
+2. Reserve block number 0 for disk manager superblock.
+3. There will never be more then 4 partitions
+4. you can assume any one write or read is serial.  But you CAN NOT assume that different file open's on the same file.  They have independent rw pointers and you need be very careful with you file open table are consistent with the actual file information on the disk.
